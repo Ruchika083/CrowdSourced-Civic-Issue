@@ -1,5 +1,5 @@
 name: Civic Talk checks
-# Re-run checks after GPS and lint fixes
+# Re-run checks after GPS form syntax correction
 
 on:
   push:
