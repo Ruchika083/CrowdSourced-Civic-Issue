@@ -1,11 +1,11 @@
-import { supabase } from './supabase';
+import { getSupabase } from './supabase';
 import type { Issue, IssueEvent, Level, Official } from '../types';
 import { departmentFor, VIZAG_AREAS } from '../types';
 
 export const HIERARCHY: Level[] = ['Ward', 'Zone', 'City', 'IAS'];
 
 export async function fetchIssues(): Promise<Issue[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issues')
     .select('*')
     .order('created_at', { ascending: false });
@@ -14,7 +14,7 @@ export async function fetchIssues(): Promise<Issue[]> {
 }
 
 export async function fetchEvents(): Promise<IssueEvent[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issue_events')
     .select('*')
     .order('created_at', { ascending: true });
@@ -39,7 +39,7 @@ export async function submitIssue(payload: {
     ? `${payload.area} (Details: ${payload.landmark})`
     : payload.area;
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issues')
     .insert({
       id,
