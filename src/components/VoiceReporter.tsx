@@ -6,6 +6,42 @@ interface Props {
   onApply: (original: string, translated: string, language: string) => void;
 }
 
+interface SpeechRecognitionAlternativeLike {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultLike {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternativeLike;
+}
+
+interface SpeechRecognitionEventLike {
+  resultIndex: number;
+  results: ArrayLike<SpeechRecognitionResultLike>;
+}
+
+interface SpeechRecognitionErrorLike {
+  error: string;
+}
+
+interface SpeechRecognitionLike {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorLike) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+
+type SpeechRecognitionWindow = Window & {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+};
+
 const LANGUAGES: { code: string; label: string; recognitionSupport: 'good' | 'partial' }[] = [
   { code: 'te-IN', label: 'Telugu', recognitionSupport: 'good' },
   { code: 'hi-IN', label: 'Hindi', recognitionSupport: 'good' },
@@ -28,9 +64,10 @@ export default function VoiceReporter({ onApply }: Props) {
   const [translating, setTranslating] = useState(false);
   const [supported, setSupported] = useState(true);
   const [consentGiven, setConsentGiven] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
-  const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+  const speechWindow = window as SpeechRecognitionWindow;
+  const SpeechRecognition = speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition;
 
   function start() {
     if (!consentGiven) {
@@ -47,7 +84,7 @@ export default function VoiceReporter({ onApply }: Props) {
     rec.continuous = true;
     rec.interimResults = true;
     let finalText = original;
-    rec.onresult = (e: any) => {
+    rec.onresult = (e: SpeechRecognitionEventLike) => {
       let interim = '';
       for (let i = e.resultIndex; i < e.results.length; i++) {
         if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
@@ -55,7 +92,7 @@ export default function VoiceReporter({ onApply }: Props) {
       }
       setOriginal(finalText + interim);
     };
-    rec.onerror = (e: any) => {
+    rec.onerror = (e: SpeechRecognitionErrorLike) => {
       toast(`Speech recognition error: ${e.error}. You can type manually instead.`, 'error');
       setListening(false);
     };
