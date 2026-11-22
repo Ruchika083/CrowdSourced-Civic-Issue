@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy-900: #0c2233;
+  --navy-800: #12314a;
+  --navy-700: #1a4160;
+  --navy-600: #24537a;
+  --teal-600: #0e7490;
+  --teal-500: #0891b2;
+  --teal-100: #d6f2f7;
+  --neutral-50: #f6f8f9;
+  --neutral-100: #eef1f3;
+  --neutral-300: #d5dce1;
+  --neutral-600: #5b6b76;
+  --success: #1e8e5a;
+  --warning: #d97706;
+  --danger: #dc2626;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--neutral-50);
+  color: #1a2b36;
+  font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-[var(--neutral-300)] shadow-sm;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background: var(--navy-700);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--navy-800);
+  }
+  .btn-teal {
+    @apply btn text-white;
+    background: var(--teal-600);
+  }
+  .btn-teal:hover:not(:disabled) {
+    background: var(--teal-500);
+  }
+  .btn-success {
+    @apply btn text-white;
+    background: var(--success);
+  }
+  .btn-success:hover:not(:disabled) {
+    background: #177247;
+  }
+  .btn-warning {
+    @apply btn text-white;
+    background: var(--warning);
+  }
+  .btn-warning:hover:not(:disabled):not(.btn-static) {
+    background: #b45309;
+  }
+  .btn-danger {
+    @apply btn text-white;
+    background: var(--danger);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background: #b91c1c;
+  }
+  .btn-ghost {
+    @apply btn border border-[var(--neutral-300)] bg-white text-[var(--navy-800)];
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--neutral-100);
+  }
+  .input {
+    @apply w-full px-3.5 py-2.5 rounded-lg border border-[var(--neutral-300)] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--teal-500)] focus:border-transparent;
+  }
+  .label {
+    @apply block text-sm font-medium text-[var(--navy-800)] mb-1.5;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .flag-green { color: var(--success); background: #e5f5ec; }
+  .flag-red { color: var(--danger); background: #fdeaea; }
+  .flag-none { color: var(--neutral-600); background: var(--neutral-100); }
+}
