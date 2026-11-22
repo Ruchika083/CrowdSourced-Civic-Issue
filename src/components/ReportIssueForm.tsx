@@ -31,7 +31,8 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [geoInfo, setGeoInfo] = useState<string | null>(null);\n  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const [geoInfo, setGeoInfo] = useState<string | null>(null);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
   const subOptions = issueType ? SUB_ISSUES[issueType] : undefined;
   const [subIssue, setSubIssue] = useState('');
