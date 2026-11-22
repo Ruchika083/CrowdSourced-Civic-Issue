@@ -32,8 +32,9 @@ export async function submitIssue(payload: {
   originalTranscript: string | null;
   translatedTranscript: string | null;
   transcriptLanguage: string | null;
+  coordinates: { lat: number; lng: number } | null;
 }): Promise<Issue> {
-  const coords = areaCoords(payload.area);
+  const coords = payload.coordinates ?? areaCoords(payload.area);
   const id = 'user-' + Date.now().toString().slice(-6);
   const fullLocation = payload.landmark
     ? `${payload.area} (Details: ${payload.landmark})`
