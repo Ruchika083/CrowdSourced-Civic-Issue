@@ -86,12 +86,12 @@ export async function insertEvent(event: {
   new_level?: string | null;
   new_due_date?: string | null;
 }): Promise<void> {
-  const { error } = await supabase.from('issue_events').insert(event);
+  const { error } = await getSupabase().from('issue_events').insert(event);
   if (error) throw error;
 }
 
 export async function updateIssue(id: string, patch: Partial<Issue>): Promise<void> {
-  const { error } = await supabase.from('issues').update(patch).eq('id', id);
+  const { error } = await getSupabase().from('issues').update(patch).eq('id', id);
   if (error) throw error;
 }
 
