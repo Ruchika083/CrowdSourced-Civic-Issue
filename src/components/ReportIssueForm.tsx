@@ -80,7 +80,6 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
     canvas.getContext('2d')?.drawImage(video, 0, 0);
     setImage(canvas.toDataURL('image/jpeg'));
     closeCamera();
-    captureGeo();
   }
 
   function closeCamera() {
@@ -93,11 +92,15 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
     if (!navigator.geolocation) return;
     setGeoInfo('Getting coordinates…');
     navigator.geolocation.getCurrentPosition(
-      (pos) =>
-        setGeoInfo(
-          `Captured near ${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`
-        ),
-      () => setGeoInfo('Could not read device location — please pick the area manually.')
+      (pos) => {
+        const nextCoordinates = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setCoordinates(nextCoordinates);
+        setGeoInfo(`GPS location selected: ${nextCoordinates.lat.toFixed(5)}, ${nextCoordinates.lng.toFixed(5)}`);
+      },
+      () => {
+        setCoordinates(null);
+        setGeoInfo('Could not read device location. The selected locality will be used instead.');
+      }
     );
   }
 
@@ -150,6 +153,7 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
         originalTranscript,
         translatedTranscript,
         transcriptLanguage,
+        coordinates,
       });
       toast(`Complaint ${issue.id} submitted successfully.`, 'success');
       onSubmitted(issue);
@@ -214,6 +218,13 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
             <label className="label" htmlFor="ri-landmark">Address details / landmark</label>
             <input id="ri-landmark" className="input" value={landmark} onChange={(e) => setLandmark(e.target.value)} placeholder="e.g. Near Post Office, Main Road" />
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-ghost" onClick={captureGeo}>
+            <MapPin size={16} /> Use my current location
+          </button>
+          {coordinates && <span className="text-xs text-[var(--teal-600)]">Precise GPS coordinates selected</span>}
         </div>
 
         {geoInfo && (
