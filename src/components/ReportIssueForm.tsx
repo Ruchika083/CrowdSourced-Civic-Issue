@@ -31,7 +31,7 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [geoInfo, setGeoInfo] = useState<string | null>(null);
+  const [geoInfo, setGeoInfo] = useState<string | null>(null);\n  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
   const subOptions = issueType ? SUB_ISSUES[issueType] : undefined;
   const [subIssue, setSubIssue] = useState('');
@@ -154,7 +154,7 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
       onSubmitted(issue);
       // reset form
       setIssueType(''); setSubIssue(''); setDescription(''); setArea(''); setLandmark('');
-      setImage(null); setAudio(null); setGeoInfo(null);
+      setImage(null); setAudio(null); setGeoInfo(null); setCoordinates(null);
       setOriginalTranscript(null); setTranslatedTranscript(null); setTranscriptLanguage(null);
     } catch (err) {
       toast('Could not save the complaint: ' + (err instanceof Error ? err.message : 'unknown error'), 'error');
