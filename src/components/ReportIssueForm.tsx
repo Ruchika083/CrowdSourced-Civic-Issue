@@ -80,7 +80,6 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
     canvas.getContext('2d')?.drawImage(video, 0, 0);
     setImage(canvas.toDataURL('image/jpeg'));
     closeCamera();
-    captureGeo();
   }
 
   function closeCamera() {
@@ -90,21 +89,17 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
   }
 
   function captureGeo() {
-    if (!navigator.geolocation) {
-      setGeoInfo('Location is not supported by this browser. The selected area will be used.');
-      return;
-    }
+    if (!navigator.geolocation) return;
     setGeoInfo('Getting coordinates…');
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        setCoordinates({ lat, lng });
-        setGeoInfo(`Device location captured: ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        const nextCoordinates = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setCoordinates(nextCoordinates);
+        setGeoInfo(`GPS location selected: ${nextCoordinates.lat.toFixed(5)}, ${nextCoordinates.lng.toFixed(5)}`);
       },
       () => {
         setCoordinates(null);
-        setGeoInfo('Could not read device location. The selected area will be used.');
+        setGeoInfo('Could not read device location. The selected locality will be used instead.');
       }
     );
   }
@@ -218,14 +213,18 @@ export default function ReportIssueForm({ onSubmitted }: Props) {
                 <option key={a} value={a}>{a}</option>
               ))}
             </select>
-            <button type="button" className="text-xs text-[var(--teal-600)] underline mt-2" onClick={captureGeo}>
-              <MapPin size={13} className="inline" /> Use my current GPS location
-            </button>
           </div>
           <div>
             <label className="label" htmlFor="ri-landmark">Address details / landmark</label>
             <input id="ri-landmark" className="input" value={landmark} onChange={(e) => setLandmark(e.target.value)} placeholder="e.g. Near Post Office, Main Road" />
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-ghost" onClick={captureGeo}>
+            <MapPin size={16} /> Use my current location
+          </button>
+          {coordinates && <span className="text-xs text-[var(--teal-600)]">Precise GPS coordinates selected</span>}
         </div>
 
         {geoInfo && (

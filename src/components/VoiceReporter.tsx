@@ -2,9 +2,28 @@ import { useRef, useState } from 'react';
 import { Mic, Square, Languages, AlertTriangle } from 'lucide-react';
 import { useToast } from './Toast';
 
-interface SpeechResultItem { isFinal: boolean; 0: { transcript: string } }
-interface SpeechRecognitionEventLike { resultIndex: number; results: ArrayLike<SpeechResultItem> }
-interface SpeechRecognitionErrorLike { error: string }
+interface Props {
+  onApply: (original: string, translated: string, language: string) => void;
+}
+
+interface SpeechRecognitionAlternativeLike {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultLike {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternativeLike;
+}
+
+interface SpeechRecognitionEventLike {
+  resultIndex: number;
+  results: ArrayLike<SpeechRecognitionResultLike>;
+}
+
+interface SpeechRecognitionErrorLike {
+  error: string;
+}
+
 interface SpeechRecognitionLike {
   lang: string;
   continuous: boolean;
@@ -15,11 +34,13 @@ interface SpeechRecognitionLike {
   start: () => void;
   stop: () => void;
 }
+
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
-interface Props {
-  onApply: (original: string, translated: string, language: string) => void;
-}
+type SpeechRecognitionWindow = Window & {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+};
 
 const LANGUAGES: { code: string; label: string; recognitionSupport: 'good' | 'partial' }[] = [
   { code: 'te-IN', label: 'Telugu', recognitionSupport: 'good' },
@@ -45,7 +66,8 @@ export default function VoiceReporter({ onApply }: Props) {
   const [consentGiven, setConsentGiven] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
-  const speechWindow = window as Window & { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor };\n  const SpeechRecognition = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
+  const speechWindow = window as SpeechRecognitionWindow;
+  const SpeechRecognition = speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition;
 
   function start() {
     if (!consentGiven) {

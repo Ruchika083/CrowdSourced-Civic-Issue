@@ -1,4 +1,3 @@
-import type { Issue } from '../types';
 import { simplifiedStatus } from '../types';
 
 export function FlagBadge({ flag }: { flag: string }) {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Issue, IssueEvent, Official } from './types';
-import { fetchIssues, fetchEvents, updateIssue, insertEvent, runDailyChecks, HIERARCHY } from './lib/data';
+import { fetchIssues, fetchEvents, updateIssue, insertEvent, runDailyChecks } from './lib/data';
 import Login from './components/Login';
 import CitizenDashboard from './components/CitizenDashboard';
 import OfficialDashboard from './components/OfficialDashboard';

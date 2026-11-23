@@ -1,11 +1,11 @@
-import { supabase } from './supabase';
+import { getSupabase } from './supabase';
 import type { Issue, IssueEvent, Level, Official } from '../types';
 import { departmentFor, VIZAG_AREAS } from '../types';
 
 export const HIERARCHY: Level[] = ['Ward', 'Zone', 'City', 'IAS'];
 
 export async function fetchIssues(): Promise<Issue[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issues')
     .select('*')
     .order('created_at', { ascending: false });
@@ -14,7 +14,7 @@ export async function fetchIssues(): Promise<Issue[]> {
 }
 
 export async function fetchEvents(): Promise<IssueEvent[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issue_events')
     .select('*')
     .order('created_at', { ascending: true });
@@ -32,14 +32,15 @@ export async function submitIssue(payload: {
   originalTranscript: string | null;
   translatedTranscript: string | null;
   transcriptLanguage: string | null;
+  coordinates: { lat: number; lng: number } | null;
 }): Promise<Issue> {
-  const coords = areaCoords(payload.area);
+  const coords = payload.coordinates ?? areaCoords(payload.area);
   const id = 'user-' + Date.now().toString().slice(-6);
   const fullLocation = payload.landmark
     ? `${payload.area} (Details: ${payload.landmark})`
     : payload.area;
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('issues')
     .insert({
       id,
@@ -86,12 +87,12 @@ export async function insertEvent(event: {
   new_level?: string | null;
   new_due_date?: string | null;
 }): Promise<void> {
-  const { error } = await supabase.from('issue_events').insert(event);
+  const { error } = await getSupabase().from('issue_events').insert(event);
   if (error) throw error;
 }
 
 export async function updateIssue(id: string, patch: Partial<Issue>): Promise<void> {
-  const { error } = await supabase.from('issues').update(patch).eq('id', id);
+  const { error } = await getSupabase().from('issues').update(patch).eq('id', id);
   if (error) throw error;
 }
 

@@ -125,29 +125,29 @@ export default function CitizenDashboard({ citizen, issues, events, onLogout, on
                   You have not reported any issues yet. Use <strong>Report an Issue</strong> to submit your first complaint.
                 </div>
               ) : (
-                <div className="card overflow-x-auto">
-                  <table className="w-full text-sm">
+                <div className="card min-w-0 overflow-x-auto" role="region" aria-label="Your reported complaints" tabIndex={0}>
+                  <table className="w-full min-w-[880px] table-fixed text-sm">
                     <thead>
                       <tr className="text-left text-xs uppercase tracking-wide text-[var(--neutral-600)] bg-[var(--neutral-50)]">
-                        <th className="px-4 py-3">Indicator</th>
-                        <th className="px-4 py-3">ID</th>
-                        <th className="px-4 py-3">Date</th>
-                        <th className="px-4 py-3">Issue</th>
-                        <th className="px-4 py-3">Status</th>
-                        <th className="px-4 py-3">Currently with</th>
-                        <th className="px-4 py-3">Actions</th>
+                        <th className="w-36 px-3 py-3">Indicator</th>
+                        <th className="w-24 px-3 py-3">ID</th>
+                        <th className="w-28 px-3 py-3">Date</th>
+                        <th className="w-40 px-3 py-3">Issue</th>
+                        <th className="w-36 px-3 py-3">Status</th>
+                        <th className="w-28 px-3 py-3">Currently with</th>
+                        <th className="w-24 px-3 py-3">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {myIssues.map((i) => (
                         <tr key={i.id} className="border-t border-[var(--neutral-100)]">
-                          <td className="px-4 py-3"><FlagBadge flag={i.flag} /></td>
+                          <td className="px-3 py-3 break-words"><FlagBadge flag={i.flag} /></td>
                           <td className="px-4 py-3 font-mono text-xs">{i.id}</td>
-                          <td className="px-4 py-3">{new Date(i.created_at).toLocaleDateString('en-IN')}</td>
-                          <td className="px-4 py-3">{i.issue_type}<br /><span className="text-xs text-[var(--neutral-600)]">{i.location}</span></td>
-                          <td className="px-4 py-3"><StatusBadge status={i.status} /></td>
-                          <td className="px-4 py-3">{i.current_level}</td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-3 break-words">{new Date(i.created_at).toLocaleDateString('en-IN')}</td>
+                          <td className="px-3 py-3 break-words">{i.issue_type}<br /><span className="text-xs text-[var(--neutral-600)]">{i.location}</span></td>
+                          <td className="px-3 py-3 break-words"><StatusBadge status={i.status} /></td>
+                          <td className="px-3 py-3 break-words">{i.current_level}</td>
+                          <td className="px-3 py-3 break-words">
                             <button className="btn-ghost !py-1.5 !px-3" onClick={() => goToTrack(i.id)}>Track</button>
                           </td>
                         </tr>
