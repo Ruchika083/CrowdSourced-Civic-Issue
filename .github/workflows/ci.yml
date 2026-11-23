@@ -1,5 +1,5 @@
 name: Civic Talk checks
-# Re-run checks after GPS form syntax correction
+# Type-check, lint, and production-build verification.
 
 on:
   push:
