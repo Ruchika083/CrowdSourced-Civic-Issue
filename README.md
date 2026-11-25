@@ -2,7 +2,18 @@
 
 Civic Talk is a civic-issue reporting and tracking prototype focused on complaints in Visakhapatnam (Vizag). It demonstrates how citizens can report local issues and how officials could review, update, and escalate them through an administrative workflow.
 
-> **Project status:** Demonstration prototype. The interface and workflows have been tested in the Bolt preview. Authentication, role verification, secure evidence storage, and production-grade access control are not implemented.
+> **Project status:** Demonstration prototype. The application has been run locally and connected to a Supabase project. Manual checks have confirmed complaint submission, persistence in the `issues` table, creation of related records in `issue_events`, and recording of status changes and their event history. Authentication, role verification, secure evidence storage, and production-grade access control are not implemented.
+
+### Verified manual checks
+
+- [x] Local application starts and connects to Supabase.
+- [x] A submitted complaint is saved in the `issues` table.
+- [x] A `Submitted` event is saved in `issue_events`.
+- [x] The event's `issue_id` matches the related complaint.
+- [x] Complaint status updates are saved.
+- [x] Status-change events are recorded in complaint history.
+
+These are manual prototype checks, not automated tests or a production-readiness assessment.
 
 ## Features
 
