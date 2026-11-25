@@ -1,5 +1,9 @@
 node_modules/
-.env
+
+# Local environment variables and secrets
+.env*
+!.env.example
+
 vite.config.js.timestamp-*.mjs
 vite.config.mjs.timestamp-*.mjs
 vite.config.cjs.timestamp-*.mjs
